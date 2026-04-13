@@ -4,6 +4,7 @@ import com.zappgo.ashish.module1_demo.dto.EmployeeDTO;
 import com.zappgo.ashish.module1_demo.entities.EmployeeEntity;
 import com.zappgo.ashish.module1_demo.repositories.EmployeeRepository;
 import org.apache.catalina.mapper.Mapper;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,11 @@ public class EmployeeService {
 
 
 
-    public void addEmployee (EmployeeDTO employee) {
-
+    public EmployeeDTO addEmployee (EmployeeDTO employee) {
 //        first change the DTO to Entity and then save
         EmployeeEntity emp = modelMapper.map(employee , EmployeeEntity.class);
-        employeeRepository.save(emp);
+        EmployeeEntity savedEmp =  employeeRepository.save(emp);
+        return modelMapper.map(savedEmp , EmployeeDTO.class);
     }
 
     public List<EmployeeDTO> getALlEmployees () {

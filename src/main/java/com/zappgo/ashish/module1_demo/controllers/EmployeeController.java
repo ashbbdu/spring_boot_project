@@ -36,9 +36,11 @@ public class EmployeeController {
       return employeeService.getEmployeeById(employeeId);
     }
 
-    @PostMapping(path = "/add-employee")
+    @PostMapping(path = "/add")
     public EmployeeDTO addEmployee (@RequestBody EmployeeDTO employee) {
-       employeeService.addEmployee(employee);
-        return employee;
+       return employeeService.addEmployee(employee);
+//       return employee;
+//        Series Name:-Ayyana Mane
+
     }
 }
