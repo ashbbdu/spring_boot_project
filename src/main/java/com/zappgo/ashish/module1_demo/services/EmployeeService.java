@@ -7,8 +7,12 @@ import org.apache.catalina.mapper.Mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,13 +31,25 @@ public class EmployeeService {
 
 
 
-    public EmployeeDTO getEmployeeById (Long employeeId) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId).orElse(null);
-//        ModelMapper model = new ModelMapper();
-//        return model.map(employee , EmployeeDTO.class); // commented this because we have created a config class
-        return modelMapper.map(employee , EmployeeDTO.class);
+//    public EmployeeDTO getEmployeeById (Long employeeId) {
+////        EmployeeEntity employee = employeeRepository.findById(employeeId).orElse(null);
+////        ModelMapper model = new ModelMapper();
+////        return model.map(employee , EmployeeDTO.class); // commented this because we have created a config class
+////        return modelMapper.map(employee , EmployeeDTO.class);
+//
+//        EmployeeEntity employee = employeeRepository.findById(employeeId)
+//                .orElseThrow(() -> new RuntimeException("Employee not found"));
+//
+//        return modelMapper.map(employee, EmployeeDTO.class);
+//    }
 
-    }
+//updated function of above function
+public Optional<EmployeeDTO> getEmployeeById (Long employeeId) {
+
+    Optional<EmployeeEntity> employee = employeeRepository.findById(employeeId);
+
+    return employee.map(e -> modelMapper.map(e , EmployeeDTO.class));
+}
 
 
 
@@ -63,6 +79,31 @@ public class EmployeeService {
 
        return modelMapper.map(updatedEmployee , EmployeeDTO.class);
 
+    }
 
+    public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
+     
+
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+
+        updates.forEach((field, value) -> {
+            Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);
+            fieldToBeUpdated.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
+        });
+
+        return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class);
+    }
+
+    public EmployeeDTO updatePartialUpdateById(Map<String, Object> updates, Long employeeId) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+
+        updates.forEach((field, value) -> {
+            Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);
+            fieldToBeUpdated.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
+        });
+
+        return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class);
     }
 }
