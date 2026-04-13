@@ -46,8 +46,22 @@ public class EmployeeService {
 
     public List<EmployeeDTO> getALlEmployees () {
         List<EmployeeEntity> employees = employeeRepository.findAll();
-        return  employees.stream().map(employee -> modelMapper.map(employee , EmployeeDTO.class))
+        return employees.stream().map(employee -> modelMapper.map(employee , EmployeeDTO.class))
                 .collect(Collectors.toList());
+
+    }
+
+    public EmployeeDTO updateEmployeeById(EmployeeDTO employee, Long employeeId) {
+        EmployeeEntity currentEmployee = employeeRepository.findById(employeeId).orElseThrow(() ->  new RuntimeException("Employee Not Found !"));
+        currentEmployee.setName(employee.getName());
+        currentEmployee.setEmail(employee.getEmail());
+        currentEmployee.setAge(employee.getAge());
+//        currentEmployee.isActive(employee.getActive()); look this why this is not working
+        currentEmployee.setDateOfJoining(employee.getDateOfJoining());
+
+       EmployeeEntity updatedEmployee =  employeeRepository.save(currentEmployee);
+
+       return modelMapper.map(updatedEmployee , EmployeeDTO.class);
 
 
     }

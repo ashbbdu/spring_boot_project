@@ -43,4 +43,9 @@ public class EmployeeController {
 //        Series Name:-Ayyana Mane
 
     }
+
+    @PutMapping(path = "/{employeeId}")
+    public EmployeeDTO updateEmployeeById (@RequestBody EmployeeDTO employee , @PathVariable Long employeeId) {
+       return employeeService.updateEmployeeById(employee , employeeId);
+    }
 }
