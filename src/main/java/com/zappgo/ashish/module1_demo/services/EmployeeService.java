@@ -36,8 +36,11 @@ public class EmployeeService {
 
 
 
-    public void addEmployee (EmployeeEntity employee) {
-        employeeRepository.save(employee);
+    public void addEmployee (EmployeeDTO employee) {
+
+//        first change the DTO to Entity and then save
+        EmployeeEntity emp = modelMapper.map(employee , EmployeeEntity.class);
+        employeeRepository.save(emp);
     }
 
     public List<EmployeeDTO> getALlEmployees () {
