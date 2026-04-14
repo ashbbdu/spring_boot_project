@@ -3,6 +3,7 @@ package com.zappgo.ashish.module1_demo.controllers;
 import com.zappgo.ashish.module1_demo.dto.EmployeeDTO;
 import com.zappgo.ashish.module1_demo.entities.EmployeeEntity;
 import com.zappgo.ashish.module1_demo.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class EmployeeController {
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<EmployeeDTO> addEmployee (@RequestBody EmployeeDTO employee) {
+    public ResponseEntity<EmployeeDTO> addEmployee (@RequestBody @Valid EmployeeDTO employee) {
         EmployeeDTO e = employeeService.addEmployee(employee);
         return new ResponseEntity<>(e , HttpStatus.CREATED);
 //       return employee;

@@ -1,26 +1,46 @@
 package com.zappgo.ashish.module1_demo.dto;
 
+import com.zappgo.ashish.module1_demo.annotations.EmployeeRoleValidation;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 
 public class EmployeeDTO {
     private Long id;
+    @NotNull(message = "Name is required !")
     private String name;
     private String email;
     private Integer age;
+
+    @PastOrPresent(message = "Date of joining can not be in future")
     private LocalDate dateOfJoining;
     private Boolean isActive;
+
+    @NotBlank(message = "Role is required !")
+//    @Pattern(regexp = "^(ADMIN|USER)$" , message = "Role of Employee can be ADMIN or USER ")
+    @EmployeeRoleValidation
+    private String role;
+
+    @NotNull
+    @Digits(integer = 6 , fraction = 2)
+    @Positive(message = "Should be greater than 0")
+    private Double salary;
 
     public EmployeeDTO () {
 
     }
 
-    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
+
+    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive , String role , Double salary) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.age = age;
         this.dateOfJoining = dateOfJoining;
         this.isActive = isActive;
+        this.role = role;
+        this.salary = salary;
+
     }
 
     public Long getId() {
@@ -70,4 +90,21 @@ public class EmployeeDTO {
     public void setActive(Boolean active) {
         isActive = active;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
 }
