@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class EmployeeController {
@@ -46,8 +43,10 @@ public class EmployeeController {
         Optional<EmployeeDTO> employee = employeeService.getEmployeeById(employeeId);
         return employee
                 .map(e -> ResponseEntity.ok(e))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new NoSuchElementException("No such employee found !"));
     }
+
+
 
     @PostMapping(path = "/add")
     public ResponseEntity<EmployeeDTO> addEmployee (@RequestBody @Valid EmployeeDTO employee) {
