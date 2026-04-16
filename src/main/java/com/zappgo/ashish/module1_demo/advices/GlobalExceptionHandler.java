@@ -18,12 +18,21 @@ public class GlobalExceptionHandler {
 //        return new ResponseEntity<>(noSuchElementException.getMessage() , HttpStatus.NOT_FOUND);
 //    }
 
+//
+//@ExceptionHandler(NoSuchElementException.class)
+//public ResponseEntity<ApiError> handleResourceNotFound (NoSuchElementException noSuchElementException) {
+////        return new ResponseEntity<>("Resource not found !" , HttpStatus.NOT_FOUND);
+//    ApiError apiError = ApiError.builder().status(HttpStatus.NOT_FOUND).message(noSuchElementException.getMessage()).build();
+//    return new ResponseEntity<>(apiError ,  HttpStatus.NOT_FOUND);
+//}
 
+
+//after api response structure
 @ExceptionHandler(NoSuchElementException.class)
-public ResponseEntity<ApiError> handleResourceNotFound (NoSuchElementException noSuchElementException) {
+public ResponseEntity<ApiResponse<?>> handleResourceNotFound (NoSuchElementException noSuchElementException) {
 //        return new ResponseEntity<>("Resource not found !" , HttpStatus.NOT_FOUND);
     ApiError apiError = ApiError.builder().status(HttpStatus.NOT_FOUND).message(noSuchElementException.getMessage()).build();
-    return new ResponseEntity<>(apiError ,  HttpStatus.NOT_FOUND);
+    return buildErrorResponseEntity(apiError);
 }
 
 
@@ -51,4 +60,10 @@ public ResponseEntity<ApiError> handleUnknownFields(HttpMessageNotReadableExcept
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+
+
+
+public ResponseEntity<ApiResponse<?>> buildErrorResponseEntity (ApiError apiError) {
+    return new ResponseEntity<>(new ApiResponse<>(apiError) , apiError.getStatus());
+}
 }
