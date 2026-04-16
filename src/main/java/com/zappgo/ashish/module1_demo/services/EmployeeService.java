@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +65,8 @@ public Optional<EmployeeDTO> getEmployeeById (Long employeeId) {
     }
 
     public EmployeeDTO updateEmployeeById(EmployeeDTO employee, Long employeeId) {
-        EmployeeEntity currentEmployee = employeeRepository.findById(employeeId).orElseThrow(() ->  new RuntimeException("Employee Not Found !"));
+//    handling exception here not in the contoller for this service
+        EmployeeEntity currentEmployee = employeeRepository.findById(employeeId).orElseThrow(() ->  new NoSuchElementException("Employee Not Found !"));
         currentEmployee.setName(employee.getName());
         currentEmployee.setEmail(employee.getEmail());
         currentEmployee.setAge(employee.getAge());

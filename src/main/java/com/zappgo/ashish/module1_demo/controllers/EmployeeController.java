@@ -49,7 +49,7 @@ public class EmployeeController {
 
 
     @PostMapping(path = "/add")
-    public ResponseEntity<EmployeeDTO> addEmployee (@RequestBody @Valid EmployeeDTO employee) {
+        public ResponseEntity<EmployeeDTO> addEmployee (@RequestBody @Valid EmployeeDTO employee) {
         EmployeeDTO e = employeeService.addEmployee(employee);
         return new ResponseEntity<>(e , HttpStatus.CREATED);
 //       return employee;
@@ -59,8 +59,8 @@ public class EmployeeController {
 
     @PutMapping(path = "/{employeeId}")
     public ResponseEntity<EmployeeDTO> updateEmployeeById (@RequestBody EmployeeDTO employee , @PathVariable Long employeeId) {
-       EmployeeDTO e = employeeService.updateEmployeeById(employee , employeeId);
-        return new ResponseEntity<>(e , HttpStatus.OK);
+       EmployeeDTO employeeDetails = employeeService.updateEmployeeById(employee , employeeId);
+        return new ResponseEntity<>(employeeDetails , HttpStatus.OK);
     }
 
     @PatchMapping("/{employeeId}")

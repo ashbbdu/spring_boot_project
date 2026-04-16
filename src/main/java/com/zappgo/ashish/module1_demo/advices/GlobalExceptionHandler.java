@@ -3,6 +3,7 @@ package com.zappgo.ashish.module1_demo.advices;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -24,5 +25,30 @@ public ResponseEntity<ApiError> handleResourceNotFound (NoSuchElementException n
     ApiError apiError = ApiError.builder().status(HttpStatus.NOT_FOUND).message(noSuchElementException.getMessage()).build();
     return new ResponseEntity<>(apiError ,  HttpStatus.NOT_FOUND);
 }
+
+
+@ExceptionHandler(Exception.class)
+public ResponseEntity<ApiError> handleInternalServerError (Exception exception) {
+//        return new ResponseEntity<>("Resource not found !" , HttpStatus.NOT_FOUND);
+    ApiError apiError = ApiError.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).message(exception.getMessage()).build();
+    return new ResponseEntity<>(apiError ,  HttpStatus.INTERNAL_SERVER_ERROR);
+}
+
+@ExceptionHandler(IllegalArgumentException.class)
+public ResponseEntity<ApiError> handleBadRequest (IllegalArgumentException exception) {
+        ApiError apiError = ApiError.builder().status(HttpStatus.NOT_ACCEPTABLE).message(exception.getMessage()).build();
+        return new ResponseEntity<>(apiError ,  HttpStatus.NOT_ACCEPTABLE);
+}
+
+@ExceptionHandler(HttpMessageNotReadableException.class)
+public ResponseEntity<ApiError> handleUnknownFields(HttpMessageNotReadableException ex) {
+
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
 
 }
